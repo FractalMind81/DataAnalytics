@@ -32,16 +32,17 @@ Sub StockTracker()
                 CloseValue = Sheet.Cells(i - 1, 6).Value
                 YearlyChange = CloseValue - OpenValue
                 Sheet.Cells(Cnt, 10).Value = YearlyChange
+                OpenValue = Sheet.Cells(i, 3).Value
                 
                 'Percent Change
-                If OpenValue <> 0 Then 'Case when Opening Value is zero
+                If OpenValue <> 0 Then 'Case when Opening Value is greater than zero
                     Sheet.Cells(Cnt, 11).Value = YearlyChange / OpenValue
                     'Check for min/max percent
-                    If Sheet.Cells(Cnt, 11).Value > MaxPercentChange Then
-                        MaxPercentChange = Sheet.Cells(Cnt, 11).Value 'Set Max Percent Change
+                    If YearlyChange / OpenValue > MaxPercentChange Then
+                        MaxPercentChange = YearlyChange / OpenValue 'Set Max Percent Change
                         MaxPercentTicker = Sheet.Cells(Cnt, 9).Value 'Set Max Ticker Value
-                    ElseIf Sheet.Cells(Cnt, 11).Value < MinPercentChange Then
-                        MinPercentChange = Sheet.Cells(Cnt, 11).Value 'Set Min Percent Change
+                    ElseIf YearlyChange / OpenValue < MinPercentChange Then
+                        MinPercentChange = YearlyChange / OpenValue 'Set Min Percent Change
                         MinPercentTicker = Sheet.Cells(Cnt, 9).Value 'Set Max Ticker Value
                     End If
                 Else
@@ -52,14 +53,14 @@ Sub StockTracker()
                 'Total Stock Volume
                 Sheet.Cells(Cnt, 12).Value = TotalStockVolume
                 'Check for Max Stock Volume
-                If Sheet.Cells(Cnt, 12).Value > MaxStockVolume Then
-                    MaxStockVolume = Sheet.Cells(Cnt, 12).Value 'Set Max Stock Volume
+                If TotalStockVolume > MaxStockVolume Then
+                    MaxStockVolume = TotalStockVolume 'Set Max Stock Volume
                     MaxStockVolumeTicker = Sheet.Cells(Cnt, 9).Value 'Set Max Stock Volume Ticker
                 End If
                 
                 TotalStockVolume = 0
                 Cnt = Cnt + 1
-                OpenValue = Sheet.Cells(i, 3).Value
+                
             Else
                 TotalStockVolume = TotalStockVolume + Sheet.Cells(i, 7).Value
             End If
