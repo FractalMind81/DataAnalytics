@@ -102,4 +102,58 @@ ON P.CUSTOMER_ID = C.CUSTOMER_ID
 GROUP BY CUSTOMER_ID,C.LAST_NAME
 ORDER BY C.LAST_NAME;
 
+-- 7a. The music of Queen and Kris Kristofferson have seen an unlikely resurgence. 
+--     As an unintended consequence, films starting with the letters K and Q have 
+--     also soared in popularity. Use subqueries to display the titles of movies 
+--     starting with the letters K and Q whose language is English
+SELECT TITLE FROM FILM 
+WHERE TITLE LIKE 'K%' OR TITLE LIKE 'Q%';
+
+-- 7b. Use subqueries to display all actors who appear in the film Alone Trip.
+SELECT concat(FIRST_NAME," ",LAST_NAME) AS ACTOR_NAME FROM ACTOR
+WHERE ACTOR_ID IN 
+(
+	SELECT ACTOR_ID FROM FILM_ACTOR
+	WHERE FILM_ID IN
+    (
+		SELECT FILM_ID FROM FILM
+        WHERE TITLE = "Alone Trip"
+	)
+); 
+
+-- 7c. You want to run an email marketing campaign in Canada, for which you will 
+--     need the names and email addresses of all Canadian customers. Use joins to 
+--     retrieve this information.
+SELECT CONCAT(FIRST_NAME," ",LAST_NAME) AS CUSTOMER_NAME,EMAIL FROM CUSTOMER 
+JOIN ADDRESS 
+ON CUSTOMER.ADDRESS_ID = ADDRESS.ADDRESS_ID
+JOIN CITY 
+ON ADDRESS.CITY_ID = CITY.CITY_ID
+JOIN COUNTRY 
+ON CITY.COUNTRY_ID = COUNTRY.COUNTRY_ID
+WHERE COUNTRY = "Canada";
+
+-- 7d. Sales have been lagging among young families, and you wish to target all family
+--     movies for a promotion. Identify all movies categorized as family films.
+SELECT TITLE FROM FILM F
+JOIN FILM_CATEGORY FC
+ON F.FILM_ID = FC.FILM_ID
+JOIN CATEGORY C
+ON FC.CATEGORY_ID = C.CATEGORY_ID
+WHERE C.NAME = "Family";
+
+-- 7e. Display the most frequently rented movies in descending order.
+SELECT F.TITLE, COUNT(R.RENTAL_ID) AS FREQUENCY FROM RENTAL R
+JOIN INVENTORY I 
+ON R.INVENTORY_ID = I.INVENTORY_ID
+JOIN FILM F
+ON I.FILM_ID = F.FILM_ID
+GROUP BY TITLE
+ORDER BY FREQUENCY DESC;
+
+
+
+
+
+
 
