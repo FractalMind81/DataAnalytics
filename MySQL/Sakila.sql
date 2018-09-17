@@ -143,13 +143,15 @@ ON FC.CATEGORY_ID = C.CATEGORY_ID
 WHERE C.NAME = "Family";
 
 -- 7e. Display the most frequently rented movies in descending order.
-SELECT F.TITLE, COUNT(R.RENTAL_ID) AS FREQUENCY FROM RENTAL R
+SELECT F.TITLE, COUNT(R.RENTAL_ID) AS RENTAL_COUNT FROM RENTAL R
 JOIN INVENTORY I 
 ON R.INVENTORY_ID = I.INVENTORY_ID
 JOIN FILM F
 ON I.FILM_ID = F.FILM_ID
 GROUP BY TITLE
-ORDER BY FREQUENCY DESC;
+ORDER BY RENTAL_COUNT DESC;
+
+-- 7f. Write a query to display how much business, in dollars, each store brought in.
 
 
 
