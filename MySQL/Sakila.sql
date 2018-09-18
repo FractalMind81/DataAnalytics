@@ -152,6 +152,60 @@ GROUP BY TITLE
 ORDER BY RENTAL_COUNT DESC;
 
 -- 7f. Write a query to display how much business, in dollars, each store brought in.
+SELECT S.STORE_ID, concat('$', format(SUM(AMOUNT), 2)) AS REVENUE FROM STORE S
+JOIN INVENTORY I 
+ON S.STORE_ID = I.STORE_ID
+JOIN RENTAL R
+ON I.INVENTORY_ID = R.INVENTORY_ID
+JOIN PAYMENT P
+ON R.RENTAL_ID = P.RENTAL_ID
+GROUP BY S.STORE_ID;
+
+-- 7g. Write a query to display for each store its store ID, city, and country.
+SELECT STORE_ID, CITY, COUNTRY FROM STORE S
+JOIN ADDRESS A
+ON S.ADDRESS_ID = A.ADDRESS_ID
+JOIN CITY C 
+ON A.CITY_ID = C.CITY_ID
+JOIN COUNTRY CT
+ON C.COUNTRY_ID = CT.COUNTRY_ID;
+
+-- 7h. List the top five genres in gross revenue in descending order. 
+--    (Hint: you may need to use the following tables: category, film_category, inventory, payment, and rental.)
+SELECT NAME, concat('$', format(SUM(AMOUNT), 2)) AS REVENUE FROM CATEGORY C
+JOIN FILM_CATEGORY FC
+ON C.CATEGORY_ID = FC.CATEGORY_ID
+JOIN INVENTORY I
+ON FC.FILM_ID = I.FILM_ID
+JOIN RENTAL R
+ON I.INVENTORY_ID = R.INVENTORY_ID
+JOIN PAYMENT P
+ON R.RENTAL_ID = P.RENTAL_ID
+GROUP BY NAME
+ORDER BY REVENUE DESC;
+
+-- 8A. Use the solution from the problem above to create a view.
+CREATE VIEW TOP_FIVE_GENRES_VW AS
+SELECT NAME, concat('$', format(SUM(AMOUNT), 2)) AS REVENUE FROM CATEGORY C
+JOIN FILM_CATEGORY FC
+ON C.CATEGORY_ID = FC.CATEGORY_ID
+JOIN INVENTORY I
+ON FC.FILM_ID = I.FILM_ID
+JOIN RENTAL R
+ON I.INVENTORY_ID = R.INVENTORY_ID
+JOIN PAYMENT P
+ON R.RENTAL_ID = P.RENTAL_ID
+GROUP BY NAME
+ORDER BY REVENUE DESC
+LIMIT 5;
+
+-- 8b. How would you display the view that you created in 8a?
+SELECT * FROM TOP_FIVE_GENRES_VW;
+
+-- 8c. Drop top_five_genres_view
+DROP VIEW TOP_FIVE_GENRES_VW;
+
+
 
 
 
