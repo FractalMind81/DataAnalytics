@@ -127,4 +127,4 @@ def date_start_end(start=None,end=None):
     return jsonify(desc_temps_dict)
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=False)
