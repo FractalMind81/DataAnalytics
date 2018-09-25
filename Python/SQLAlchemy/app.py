@@ -11,7 +11,7 @@ from flask import Flask, jsonify
 #################################################
 # Database Setup
 #################################################
-engine = create_engine("sqlite:///Resources/hawaii.sqlite")
+engine = create_engine("sqlite:///Resources/hawaii.sqlite", connect_args={'check_same_thread': False}, echo=True)
 
 # reflect an existing database into a new model
 Base = automap_base()
@@ -62,6 +62,7 @@ def precipitation():
         prcp_dict[measurement.date] = measurement.prcp
         prcp_data.append(prcp_dict)
 
+    print("Server received request for percipitation data")
     return jsonify(prcp_data)
 
 
@@ -77,6 +78,7 @@ def stations():
     for station in results:
         stations.append(station.station)
 
+    print("Server received request for station data")
     return jsonify(stations)
 
 @app.route("/api/v1.0/tobs")
@@ -91,6 +93,7 @@ def tobs():
     for tob in results:
         tobs_data.append(tob.tobs)
 
+    print("Server received request for tobs data")
     return jsonify(tobs_data)
     
 @app.route("/api/v1.0/<start>")
@@ -107,6 +110,7 @@ def date_start(start):
     desc_temps_dict["AVG"] = results[0][1]
     desc_temps_dict["MAX"] = results[0][2]
 
+    print("Server received request using start date")
     return jsonify(desc_temps_dict)
 
 @app.route("/api/v1.0/<start>/<end>")
@@ -124,6 +128,7 @@ def date_start_end(start=None,end=None):
     desc_temps_dict["AVG"] = results[0][1]
     desc_temps_dict["MAX"] = results[0][2]
 
+    print("Server received request using start and end date")
     return jsonify(desc_temps_dict)
 
 if __name__ == '__main__':
